@@ -9,11 +9,14 @@ export const connectToServer = () => {
 }
 
 const addListeners = (socket: Socket) => {
-  const serverStatusLabel = document.querySelector('#server-status')!
-  const clientsList = document.querySelector('#clients-list')!
+  const clientsList = document.querySelector<HTMLUListElement>('#clients-list')!
   const messageForm = document.querySelector<HTMLFormElement>('#message-form')!
   const messageInput =
     document.querySelector<HTMLInputElement>('#message-input')!
+  const messagesList =
+    document.querySelector<HTMLUListElement>('#messages-list')!
+  const serverStatusLabel =
+    document.querySelector<HTMLSpanElement>('#server-status')!
 
   socket.on('connect', () => {
     serverStatusLabel.innerHTML = 'online'
@@ -42,4 +45,21 @@ const addListeners = (socket: Socket) => {
 
     messageInput.value = ''
   })
+
+  socket.on(
+    'message-from-server',
+    (payload: { fullName: string; message: string }) => {
+      const newMessage = `
+        <li>
+          <strong>${payload.fullName}</strong>
+          <span>${payload.message}</span>
+        </li>
+      `
+
+      const li = document.createElement('li')
+      li.innerHTML = newMessage
+
+      messagesList.append(li)
+    }
+  )
 }
