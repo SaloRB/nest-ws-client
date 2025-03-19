@@ -3,10 +3,14 @@ import './style.css'
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
-    <h1>Websocket - Client</h1>
+    <h2>Websocket - Client</h2>
     <span id="server-status">offline</span>
 
     <ul id="clients-list"></ul>
+
+    <form id="message-form">
+      <input type="text" placeholder="message" id="message-input" />
+    </form>
   </div>
 `
 

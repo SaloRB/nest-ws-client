@@ -11,6 +11,9 @@ export const connectToServer = () => {
 const addListeners = (socket: Socket) => {
   const serverStatusLabel = document.querySelector('#server-status')!
   const clientsList = document.querySelector('#clients-list')!
+  const messageForm = document.querySelector<HTMLFormElement>('#message-form')!
+  const messageInput =
+    document.querySelector<HTMLInputElement>('#message-input')!
 
   socket.on('connect', () => {
     serverStatusLabel.innerHTML = 'online'
@@ -26,5 +29,17 @@ const addListeners = (socket: Socket) => {
       clientsListHTML += `<li>${clientId}</li>`
     })
     clientsList.innerHTML = clientsListHTML
+  })
+
+  messageForm.addEventListener('submit', (event) => {
+    event.preventDefault()
+    if (messageInput.value.trim().length <= 0) return
+
+    socket.emit('message-from-client', {
+      id: 'YO',
+      message: messageInput.value,
+    })
+
+    messageInput.value = ''
   })
 }
