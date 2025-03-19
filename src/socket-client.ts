@@ -10,6 +10,7 @@ export const connectToServer = () => {
 
 const addListeners = (socket: Socket) => {
   const serverStatusLabel = document.querySelector('#server-status')!
+  const clientsList = document.querySelector('#clients-list')!
 
   socket.on('connect', () => {
     serverStatusLabel.innerHTML = 'online'
@@ -17,5 +18,13 @@ const addListeners = (socket: Socket) => {
 
   socket.on('disconnect', () => {
     serverStatusLabel.innerHTML = 'offline'
+  })
+
+  socket.on('updated-clients', (clients: string[]) => {
+    let clientsListHTML = ''
+    clients.forEach((clientId) => {
+      clientsListHTML += `<li>${clientId}</li>`
+    })
+    clientsList.innerHTML = clientsListHTML
   })
 }
